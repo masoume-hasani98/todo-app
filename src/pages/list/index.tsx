@@ -16,12 +16,11 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-
-const getTodos = () => JSON.parse(localStorage.getItem("todos") || "[]");
-const setTodos = (todos: any[]) => localStorage.setItem("todos", JSON.stringify(todos));
+import { TodoType } from "./type";
+import { getTodos, setTodos } from "../../utils/storage";
 
 export default function TodoList() {
-  const [todos, setTodosState] = useState<any[]>([]);
+  const [todos, setTodosState] = useState<TodoType[]>([]);
   const [filter, setFilter] = useState("all");
   const [sortOption, setSortOption] = useState("date");
 
@@ -63,16 +62,13 @@ export default function TodoList() {
   });
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
+    <Container maxWidth="md" className="py-8">
+      <Typography variant="h4" gutterBottom className="text-center font-bold mb-6">
         Todo List
       </Typography>
-      <Button variant="contained" onClick={() => navigate("/create")} sx={{ mb: 2 }}>
-        Add Todo
-      </Button>
 
-      <Box display="flex" gap={2} mb={2}>
-        <FormControl>
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+        <FormControl fullWidth className="md:w-1/3">
           <InputLabel>Filter</InputLabel>
           <Select value={filter} onChange={(e) => setFilter(e.target.value)} label="Filter">
             <MenuItem value="all">All</MenuItem>
@@ -81,7 +77,7 @@ export default function TodoList() {
           </Select>
         </FormControl>
 
-        <FormControl>
+        <FormControl fullWidth className="md:w-1/3">
           <InputLabel>Sort</InputLabel>
           <Select
             value={sortOption}
@@ -93,51 +89,67 @@ export default function TodoList() {
           </Select>
         </FormControl>
 
-        <Button variant="outlined" color="secondary" onClick={clearCompleted}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={clearCompleted}
+          className="w-full md:w-1/3"
+        >
           Clear Completed
         </Button>
-      </Box>
+      </div>
 
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Description</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {sortedTodos.map((todo) => (
-            <TableRow key={todo.id}>
-              <TableCell>{todo.description}</TableCell>
-              <TableCell>
-                <Checkbox
-                  checked={todo.completed}
-                  onChange={() => toggleComplete(todo.id)}
-                  color="primary"
-                />
-                {todo.completed ? "Completed" : "Active"}
-              </TableCell>
-              <TableCell>
-                <Button
-                  variant="outlined"
-                  onClick={() => navigate(`/edit/${todo.id}`)}
-                  sx={{ mr: 1 }}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  onClick={() => handleDelete(todo.id)}
-                >
-                  Delete
-                </Button>
-              </TableCell>
+      <Button
+        variant="contained"
+        onClick={() => navigate("/create")}
+        className="mb-4 w-full md:w-auto"
+      >
+        Add Todo
+      </Button>
+
+      <div className="overflow-x-auto">
+        <Table className="min-w-[600px]">
+          <TableHead>
+            <TableRow>
+              <TableCell>Description</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell align="center">Actions</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {sortedTodos.map((todo) => (
+              <TableRow key={todo.id}>
+                <TableCell>{todo.description}</TableCell>
+                <TableCell>
+                  <Checkbox
+                    checked={todo.completed}
+                    onChange={() => toggleComplete(todo.id)}
+                    color="primary"
+                  />
+                  {todo.completed ? "Completed" : "Active"}
+                </TableCell>
+                <TableCell align="center">
+                  <div className="flex justify-center gap-2">
+                    <Button
+                      variant="outlined"
+                      onClick={() => navigate(`/edit/${todo.id}`)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() => handleDelete(todo.id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </Container>
   );
 }

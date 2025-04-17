@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Container, Typography, TextField, Checkbox, Button } from "@mui/material";
-
-const getTodos = () => JSON.parse(localStorage.getItem("todos") || "[]");
-const setTodos = (todos: any[]) => localStorage.setItem("todos", JSON.stringify(todos));
+import { getTodos, setTodos } from "../../utils/storage";
 
 export default function EditTodo() {
   const { id } = useParams();
@@ -30,26 +28,40 @@ export default function EditTodo() {
   };
 
   return (
-    <Container>
-      <Typography variant="h5" gutterBottom>Edit Todo</Typography>
-      <form onSubmit={handleSubmit}>
+    <Container maxWidth="sm" className="py-10">
+      <Typography variant="h5" gutterBottom className="text-center font-bold mb-6">
+        Edit Todo
+      </Typography>
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <TextField
           label="Description"
           fullWidth
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          sx={{ mb: 2 }}
         />
-        <div>
+
+        <label className="flex items-center gap-2">
           <Checkbox
             checked={completed}
             onChange={(e) => setCompleted(e.target.checked)}
             color="primary"
           />
-          <span>Completed</span>
-        </div>
-        <Button type="submit" variant="contained">Update</Button>
+          <span className="text-gray-700">Completed</span>
+        </label>
+
+        <Button type="submit" variant="contained" className="w-full">
+          Update
+        </Button>
       </form>
+
+      <Button
+        variant="text"
+        onClick={() => navigate("/")}
+        className="mt-4 w-full text-blue-600"
+      >
+        Back to List
+      </Button>
     </Container>
   );
 }
