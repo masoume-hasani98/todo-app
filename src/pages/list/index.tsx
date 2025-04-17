@@ -14,7 +14,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Box,
 } from "@mui/material";
 import { TodoType } from "./type";
 import { getTodos, setTodos } from "../../utils/storage";
