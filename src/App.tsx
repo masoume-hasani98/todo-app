@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import EditTodo from "./pages/edit/EditTodo";
+import EditTodo from "./pages/edit";
 import TodoList from "./pages/list";
 import CreateTodo from "./pages/create";
 
